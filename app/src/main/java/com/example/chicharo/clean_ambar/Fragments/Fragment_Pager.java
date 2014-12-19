@@ -65,6 +65,13 @@ public class Fragment_Pager extends android.support.v4.app.Fragment {
             public void onPageSelected(int position) {
                 Log.d("tabs","onPageSelected "+String.valueOf(position)); //sos groso sabelo
                 currentFragment = position;
+                if(position == 0) {
+                    fragmento_collection.setActive(true);
+                    collection_objects_fragment.setActive(false);
+                }else{
+                    collection_objects_fragment.setActive(true);
+                    fragmento_collection.setActive(false);
+                }
             }
 
             @Override

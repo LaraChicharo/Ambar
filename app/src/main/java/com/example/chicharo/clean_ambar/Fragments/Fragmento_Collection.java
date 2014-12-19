@@ -50,20 +50,16 @@ public class Fragmento_Collection extends Fragment{
     Activity myActivity;
 
     // declare class member variables
-    private GestureDetector mGestureDetector;
-    private View.OnTouchListener mGestureListener;
-    private boolean mIsScrolling = false;
+    boolean active = true;
     int y=0;
+    SearchView searchView;
+    String edgarRulzz;
 
-    //Fragmento_Collection fragmento_collection = new Fragmento_Collection();
-    /*public static Fragmento_Collection newInstance(int position) {
-        Fragmento_Collection fragmentCercanos = new Fragmento_Collection();
-        Bundle extraArguments = new Bundle();
-        fragmentCercanos.setArguments(extraArguments);
-        return fragmentCercanos;
-    }*/
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
-    //@Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true); //WTF?
@@ -71,7 +67,7 @@ public class Fragmento_Collection extends Fragment{
     }
 
     private static final String url = "http://api.androidhive.info/json/movies.json";
-    //@Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.collection_view_swipe, container, false);
         myActivity =getActivity();
@@ -85,37 +81,26 @@ public class Fragmento_Collection extends Fragment{
         // in content do not change the layout size of the RecyclerView
         recList.setHasFixedSize(false);
 
-        SearchView searchView = (SearchView)getActivity().findViewById(R.id.searchView);
-        /*searchView.setOnSearchClickListener(new View.OnClickListener() {
-            private boolean extended = false;
-
-            @Override
-            public void onClick(View v) {
-                //Log.d("setOnSearchClickListener","onClick");
-                //if(isRefreshing(2))
-                //mAdapter.getFilter().filter(stringSearch);
-                //Log.d("setOnSearchClickListener",stringSearch.toString());
-           */
-
+        //searchView = (SearchView)getActivity().findViewById(R.id.searchView);
+        //Collection_Objects_Fragment collection_objects_fragment = new Collection_Objects_Fragment();
+        //collection_objects_fragment.setSearchView(searchView);
+        searchView = (SearchView)getActivity().findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String arg0) {
-                Log.d("onQueryTextSubmit",arg0); //lml
-                mAdapter.getFilter().filter(arg0);
-                y=0;
-                //fragment_pager.setQuery(arg0);
-                return true;
-            }
-
-            //Este no
-            @Override
-            public boolean onQueryTextChange(String arg0) {
-                if (arg0.equals("")){
-                    mAdapter.getFilter().filter(arg0);
-                }
+            public boolean onQueryTextSubmit(String query) {
                 return false;
             }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(active) {
+                    mAdapter.getFilter().filter(newText);
+                    y=0;
+                }
+                return true;
+            }
         });
+
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
