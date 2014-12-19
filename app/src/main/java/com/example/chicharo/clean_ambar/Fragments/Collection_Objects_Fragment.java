@@ -6,6 +6,7 @@ package com.example.chicharo.clean_ambar.Fragments;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.SearchView;
 import com.example.chicharo.clean_ambar.R;
 import com.example.chicharo.clean_ambar.adapter.Collection_Objects_Recycler;
 import com.example.chicharo.clean_ambar.models.Collection_Object;
+import com.example.chicharo.clean_ambar.util.compositeOnQueryTextListener;
 
 import java.util.ArrayList;
 
@@ -73,7 +75,7 @@ public class Collection_Objects_Fragment extends android.support.v4.app.Fragment
         recList.setAdapter(adapter);
 
         searchView = (SearchView)getActivity().findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        SearchView.OnQueryTextListener listener =new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -81,13 +83,16 @@ public class Collection_Objects_Fragment extends android.support.v4.app.Fragment
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(active) {
+                if(true) { //active
+                    Log.d("onQueryTextChange","Listener 1");
                     adapter.getFilter().filter(newText);
                     y=0;
                 }
                 return true;
             }
-        });
+        };
+        SearchView.OnQueryTextListener defListener = new compositeOnQueryTextListener(listener);
+        searchView.setOnQueryTextListener(defListener);
 
         recList.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
